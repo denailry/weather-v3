@@ -4,12 +4,10 @@ import com.denailry.weatherv3.mvp.WeatherModel
 import com.mocked.cache.Cache
 import com.mocked.cache.Weather
 
-class CacheStorage(val cache: Cache) : Repository {
+class CacheStorage(private val cache: Cache) : Repository {
     override fun create(model: WeatherModel) {
-        val key = model.location + ":" + model.day.toString()
-        val weather = Weather(model.location, model.type, model.temperature.toString(), model.day.toString())
-
-        cache.save(key, weather)
+        val key = "${model.location}:${model.day}"
+        cache.save(key, createCachedWeatherFromModel(model))
     }
 
     override fun read(location: String): List<WeatherModel> {
@@ -35,5 +33,9 @@ class CacheStorage(val cache: Cache) : Repository {
             }
         }
         return null
+    }
+
+    private fun createCachedWeatherFromModel(model: WeatherModel) : Weather {
+        return Weather(model.location, model.type, model.temperature.toString(), model.day.toString())
     }
 }
