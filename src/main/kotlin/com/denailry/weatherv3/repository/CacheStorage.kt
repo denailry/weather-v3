@@ -13,10 +13,27 @@ class CacheStorage(val cache: Cache) : Repository {
     }
 
     override fun read(location: String): List<WeatherModel> {
-        return ArrayList()
+        val results = ArrayList<WeatherModel>()
+
+        for (day in WeatherModel.Day.values()) {
+            val weather = cache.get("$location:$day") ?: continue
+            val model = createModel(weather) ?: continue
+            results.add(model)
+        }
+
+        return results
     }
 
     override fun update(model: WeatherModel) {}
 
     override fun delete(model: WeatherModel) {}
+
+    private fun createModel(weather: Weather) : WeatherModel? {
+        for (day in WeatherModel.Day.values()) {
+            if (weather.day == day.toString()) {
+                return WeatherModel(weather.location, day, weather.temperature.toFloat(), weather.type)
+            }
+        }
+        return null
+    }
 }

@@ -7,11 +7,12 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class CacheStorageTest {
-    private val storage = object : Cache {
+    private var storage = object : Cache {
         var lastKey: String = ""
             private set
         var lastWeather: Weather? = null
             private set
+        var savedWeathers = HashMap<String, Weather>()
 
         override fun save(key: String, weather: Weather?) {
             lastKey = key
@@ -19,7 +20,7 @@ class CacheStorageTest {
         }
 
         override fun get(key: String): Weather? {
-            return Weather("someplace", "shiny", "25.5", "shiny")
+            return savedWeathers[key]
         }
     }
 
@@ -33,5 +34,33 @@ class CacheStorageTest {
         val expected = model.location + ":" + model.day.toString()
 
         assertEquals(expected, storage.lastKey)
+    }
+
+    @Test
+    fun `given location when read is called then return all saved weathers of that location no less or more`() {
+        val location = "jakarta"
+        val weathers = arrayListOf<Weather>(
+            Weather(location, "x", "0.0", "monday"),
+            Weather(location, "x", "0.0", "friday"),
+            Weather(location, "x", "0.0", "tuesday")
+        )
+
+        storage.savedWeathers = HashMap()
+        weathers.forEach { storage.savedWeathers["${it.location}:${it.day}"] = it }
+
+        val cache = CacheStorage(storage)
+        val results = cache.read(location)
+
+        assertEquals(weathers.size, results.size)
+        for (result in results) {
+            for (i in 0 until weathers.size) {
+                val weather = weathers[i]
+                if (result.location == weather.location && result.day.toString() == weather.day) {
+                    weathers.removeAt(i)
+                    break
+                }
+            }
+        }
+        assertEquals(0, weathers.size)
     }
 }
