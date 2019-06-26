@@ -1,8 +1,10 @@
 package com.mocked.cache
 
-const val EXPIRATION_IN_MILLISECONDS = 5000
-
 class Cache {
+    companion object {
+        private const val EXPIRATION_IN_MILLISECONDS = 5000
+    }
+
     private val weathersByLoction: HashMap<String, CachedWeather?> = HashMap()
 
     fun save(key: String, weather: Weather?) {
