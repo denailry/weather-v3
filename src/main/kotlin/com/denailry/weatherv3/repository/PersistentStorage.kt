@@ -13,7 +13,12 @@ class PersistentStorage(private val database: Database) : Repository {
     }
 
     override fun read(location: String): List<WeatherModel> {
-        return ArrayList()
+        val weathers = database.getByLocation(location)
+
+        val results = ArrayList<WeatherModel>()
+        weathers.forEach { results.add(createModel(it)) }
+
+        return results
     }
 
     override fun update(model: WeatherModel) {}
@@ -27,5 +32,15 @@ class PersistentStorage(private val database: Database) : Repository {
             }
         }
         return null
+    }
+
+    private fun createModel(weather: Weather) : WeatherModel {
+        for (day in WeatherModel.Day.values()) {
+            if (day.toString() == weather.day.toString()) {
+                return WeatherModel(weather.location, day, weather.temperature, weather.type)
+            }
+        }
+
+        throw Exception("unexpected type of day from database")
     }
 }

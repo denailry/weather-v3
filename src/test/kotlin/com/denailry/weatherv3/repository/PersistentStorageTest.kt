@@ -11,6 +11,7 @@ class PersistentStorageTest {
     private val storage = object : Database {
         var lastSavedWeather: Weather? = null
             private set
+        var weathers: List<Weather> = ArrayList()
 
         override fun clean() {}
 
@@ -19,7 +20,7 @@ class PersistentStorageTest {
         }
 
         override fun getByLocation(location: String): List<Weather> {
-            return ArrayList()
+            return weathers
         }
 
         override fun delete(location: String, day: WeatherDay) {}
@@ -34,5 +35,31 @@ class PersistentStorageTest {
 
         assertEquals(model.location, storage.lastSavedWeather?.location)
         assertEquals(model.day.toString(), storage.lastSavedWeather?.day.toString())
+    }
+
+    @Test
+    fun `given location when read is called then return all saved weather models corresponding to location`() {
+        val location = "jakarta"
+        val weathers = arrayListOf<Weather>(
+            Weather(location, WeatherDay.SUNDAY, 5.0f, "shiny"),
+            Weather(location, WeatherDay.MONDAY, 5.0f, "shiny"),
+            Weather(location, WeatherDay.TUESDAY, 5.0f, "shiny")
+        )
+        storage.weathers = weathers
+
+        val database = PersistentStorage(storage)
+        val results = database.read(location)
+
+        assertEquals(weathers.size, results.size)
+        for (result in results) {
+            for (i in 0 until weathers.size) {
+                val weather = weathers[i]
+                if (result.location == weather.location && result.day.toString() == weather.day.toString()) {
+                    weathers.removeAt(i)
+                    break
+                }
+            }
+        }
+        assertEquals(0, weathers.size)
     }
 }
