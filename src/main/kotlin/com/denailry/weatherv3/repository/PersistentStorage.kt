@@ -7,10 +7,7 @@ import com.mocked.database.WeatherDay
 import java.lang.Exception
 
 class PersistentStorage(private val database: Database) : Repository {
-    override fun create(model: WeatherModel) {
-        val weather = createWeatherFrom(model) ?: throw Exception("invalid model")
-        database.save(weather)
-    }
+    override fun create(model: WeatherModel) = update(model)
 
     override fun read(location: String): List<WeatherModel> {
         val weathers = database.getByLocation(location)
