@@ -4,13 +4,14 @@ import com.denailry.weatherv3.mvp.WeatherModel
 import com.mocked.cache.Cache
 import com.mocked.cache.Weather
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 
 class CacheStorageTest {
     private var storage = object : Cache {
         var lastKey: String = ""
             private set
-        var lastWeather: Weather? = null
+        var lastWeather: Weather? = Weather("", "", "", "")
             private set
         var savedWeathers = HashMap<String, Weather>()
 
@@ -67,5 +68,14 @@ class CacheStorageTest {
         assertEquals(0, weathers.size)
     }
 
+    @Test
+    fun `given weather when delete is called then null should be saved on corresponding location-day pair`() {
+        val model = WeatherModel("jakarta", WeatherModel.Day.MONDAY, 25.5f, "shiny")
+        val cache = CacheStorage(storage)
 
+        cache.delete(model)
+
+        assertEquals("${model.location}:${model.day}", storage.lastKey)
+        assertNull(storage.lastWeather)
+    }
 }

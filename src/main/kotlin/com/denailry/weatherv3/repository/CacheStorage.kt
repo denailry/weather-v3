@@ -24,7 +24,9 @@ class CacheStorage(private val cache: Cache) : Repository {
 
     override fun update(model: WeatherModel) {}
 
-    override fun delete(model: WeatherModel) {}
+    override fun delete(model: WeatherModel) {
+        cache.save("${model.location}:${model.day}", null)
+    }
 
     private fun createModel(weather: Weather) : WeatherModel? {
         for (day in WeatherModel.Day.values()) {
