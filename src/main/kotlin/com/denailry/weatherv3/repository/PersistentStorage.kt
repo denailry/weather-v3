@@ -21,7 +21,10 @@ class PersistentStorage(private val database: Database) : Repository {
         return results
     }
 
-    override fun update(model: WeatherModel) {}
+    override fun update(model: WeatherModel) {
+        val weather = createWeatherFrom(model) ?: throw Exception("invalid model")
+        database.save(weather)
+    }
 
     override fun delete(model: WeatherModel) {}
 

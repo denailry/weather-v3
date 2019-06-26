@@ -62,4 +62,15 @@ class PersistentStorageTest {
         }
         assertEquals(0, weathers.size)
     }
+
+    @Test
+    fun `given weather model when update is called then identical weather corresponding to model should be saved`() {
+        val database = PersistentStorage(storage)
+        val model = WeatherModel("jakarta", WeatherModel.Day.MONDAY, 25.5f, "shiny")
+
+        database.update(model)
+
+        assertEquals(model.location, storage.lastSavedWeather?.location)
+        assertEquals(model.day.toString(), storage.lastSavedWeather?.day.toString())
+    }
 }
