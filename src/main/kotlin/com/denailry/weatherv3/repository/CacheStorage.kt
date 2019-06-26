@@ -6,8 +6,7 @@ import com.mocked.cache.Weather
 
 class CacheStorage(private val cache: Cache) : Repository {
     override fun create(model: WeatherModel) {
-        val key = "${model.location}:${model.day}"
-        cache.save(key, createCachedWeatherFromModel(model))
+        cache.save(createKey(model), createCachedWeatherFromModel(model))
     }
 
     override fun read(location: String): List<WeatherModel> {
@@ -25,7 +24,7 @@ class CacheStorage(private val cache: Cache) : Repository {
     override fun update(model: WeatherModel) {}
 
     override fun delete(model: WeatherModel) {
-        cache.save("${model.location}:${model.day}", null)
+        cache.save(createKey(model), null)
     }
 
     private fun createModel(weather: Weather) : WeatherModel? {
@@ -40,4 +39,6 @@ class CacheStorage(private val cache: Cache) : Repository {
     private fun createCachedWeatherFromModel(model: WeatherModel) : Weather {
         return Weather(model.location, model.type, model.temperature.toString(), model.day.toString())
     }
+
+    private fun createKey(model: WeatherModel) : String = "${model.location}:${model.day}"
 }
