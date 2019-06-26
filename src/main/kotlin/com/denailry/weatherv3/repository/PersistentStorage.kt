@@ -23,7 +23,13 @@ class PersistentStorage(private val database: Database) : Repository {
         database.save(weather)
     }
 
-    override fun delete(model: WeatherModel) {}
+    override fun delete(model: WeatherModel) {
+        for (day in WeatherDay.values()) {
+            if (day.toString() == model.day.toString()) {
+                database.delete(model.location, day)
+            }
+        }
+    }
 
     private fun createWeatherFrom(model: WeatherModel) : Weather? {
         for (day in WeatherDay.values()) {

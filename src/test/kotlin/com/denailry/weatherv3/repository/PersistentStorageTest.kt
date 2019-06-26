@@ -23,7 +23,9 @@ class PersistentStorageTest {
             return weathers
         }
 
-        override fun delete(location: String, day: WeatherDay) {}
+        override fun delete(location: String, day: WeatherDay) {
+            lastSavedWeather = Weather(location, day, 25.5f, "")
+        }
     }
 
     @Test
@@ -69,6 +71,17 @@ class PersistentStorageTest {
         val model = WeatherModel("jakarta", WeatherModel.Day.MONDAY, 25.5f, "shiny")
 
         database.update(model)
+
+        assertEquals(model.location, storage.lastSavedWeather?.location)
+        assertEquals(model.day.toString(), storage.lastSavedWeather?.day.toString())
+    }
+
+    @Test
+    fun `given weather model when delete is called then location and day passed should be identical to model`() {
+        val database = PersistentStorage(storage)
+        val model = WeatherModel("jakarta", WeatherModel.Day.MONDAY, 25.5f, "shiny")
+
+        database.delete(model)
 
         assertEquals(model.location, storage.lastSavedWeather?.location)
         assertEquals(model.day.toString(), storage.lastSavedWeather?.day.toString())
