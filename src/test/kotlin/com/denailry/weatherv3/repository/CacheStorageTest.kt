@@ -22,6 +22,11 @@ class CacheStorageTest {
         override fun get(key: String): Weather? {
             return savedWeathers[key]
         }
+
+        fun setSavedWeathers(weathers: List<Weather>) {
+            savedWeathers = HashMap()
+            weathers.forEach { savedWeathers["${it.location}:${it.day}"] = it }
+        }
     }
 
     @Test
@@ -44,9 +49,7 @@ class CacheStorageTest {
             Weather(location, "x", "0.0", "friday"),
             Weather(location, "x", "0.0", "tuesday")
         )
-
-        storage.savedWeathers = HashMap()
-        weathers.forEach { storage.savedWeathers["${it.location}:${it.day}"] = it }
+        storage.setSavedWeathers(weathers)
 
         val cache = CacheStorage(storage)
         val results = cache.read(location)
@@ -63,4 +66,6 @@ class CacheStorageTest {
         }
         assertEquals(0, weathers.size)
     }
+
+
 }
