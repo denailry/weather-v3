@@ -21,7 +21,9 @@ class CacheStorage(private val cache: Cache) : Repository {
         return results
     }
 
-    override fun update(model: WeatherModel) {}
+    override fun update(model: WeatherModel) {
+        cache.save(createKey(model), createCachedWeatherFromModel(model))
+    }
 
     override fun delete(model: WeatherModel) {
         cache.save(createKey(model), null)

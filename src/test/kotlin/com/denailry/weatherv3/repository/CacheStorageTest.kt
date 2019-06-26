@@ -3,8 +3,7 @@ package com.denailry.weatherv3.repository
 import com.denailry.weatherv3.mvp.WeatherModel
 import com.mocked.cache.Cache
 import com.mocked.cache.Weather
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 class CacheStorageTest {
@@ -77,5 +76,17 @@ class CacheStorageTest {
 
         assertEquals("${model.location}:${model.day}", storage.lastKey)
         assertNull(storage.lastWeather)
+    }
+
+    @Test
+    fun `given weather when update is called then weather and corresponding key should be saved to storage`() {
+        val model = WeatherModel("jakarta", WeatherModel.Day.MONDAY, 25.5f, "shiny")
+        val cache = CacheStorage(storage)
+
+        cache.update(model)
+
+        assertEquals("${model.location}:${model.day}", storage.lastKey)
+        assertEquals(model.location, storage.lastWeather?.location)
+        assertEquals(model.day.toString(), storage.lastWeather?.day)
     }
 }
