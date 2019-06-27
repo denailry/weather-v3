@@ -30,7 +30,7 @@ class WeatherPresenterTest {
     }
 
     @Test
-    fun `given location and day when searching by given data then presenter should returned dat received from repository`() {
+    fun `given location and day when searching by given data then presenter should return data received from repository`() {
         val location = "jakarta"
         val models : ArrayList<WeatherModel> = arrayListOf(
             WeatherModel(location, WeatherModel.Day.MONDAY, 25.0f, "shiny"),
@@ -58,13 +58,13 @@ class WeatherPresenterTest {
     fun `given location and day when searching by given data then give only 5 consecutive day of weather to view`() {
         val location = "jakarta"
         val models : ArrayList<WeatherModel> = arrayListOf(
-            WeatherModel(location, WeatherModel.Day.MONDAY, 25.0f, "shiny"),
-            WeatherModel(location, WeatherModel.Day.TUESDAY, 25.0f, "rainy"),
+            WeatherModel(location, WeatherModel.Day.SATURDAY, 25.0f, "rainy"),
+            WeatherModel(location, WeatherModel.Day.SUNDAY, 25.0f, "rainy"),
             WeatherModel(location, WeatherModel.Day.WEDNESDAY, 25.0f, "rainy"),
             WeatherModel(location, WeatherModel.Day.THURSDAY, 25.0f, "rainy"),
-            WeatherModel(location, WeatherModel.Day.FRIDAY, 25.0f, "rainy"),
-            WeatherModel(location, WeatherModel.Day.SATURDAY, 25.0f, "rainy"),
-            WeatherModel(location, WeatherModel.Day.SUNDAY, 25.0f, "rainy")
+            WeatherModel(location, WeatherModel.Day.MONDAY, 25.0f, "shiny"),
+            WeatherModel(location, WeatherModel.Day.TUESDAY, 25.0f, "rainy"),
+            WeatherModel(location, WeatherModel.Day.FRIDAY, 25.0f, "rainy")
         )
         repository.savedWeathers = models
 

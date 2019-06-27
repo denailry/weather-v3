@@ -14,8 +14,8 @@ class WeatherPresenter(private val view: WeatherContract.View, private val repo:
         view.showWeathers(filterWeatherByDay(weathers, day))
     }
 
-    private fun filterWeatherByDay(weathers: List<WeatherModel>, day: String) : List<WeatherModel> {
-        weathers.sortedWith(compareBy{it.day})
+    private fun filterWeatherByDay(unsortedWeathers: List<WeatherModel>, day: String) : List<WeatherModel> {
+        val weathers = unsortedWeathers.sortedWith(compareBy{it.day})
 
         val startIndex = findIndexOfDay(weathers, day) ?: return ArrayList()
 
