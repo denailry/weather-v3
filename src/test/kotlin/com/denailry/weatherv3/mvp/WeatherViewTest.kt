@@ -1,23 +1,22 @@
 package com.denailry.weatherv3.mvp
 
-import com.mocked.database.Weather
+import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.doNothing
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.mockito.Mock
+import org.mockito.MockitoAnnotations
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 
 class WeatherViewTest {
-    private val presenter = object : WeatherContract.Presenter {
-        var lastSearchedLocation: String? = null
-            private set
-        var lastSearchedDay: String? = null
-            private set
+    @Mock
+    lateinit var presenter: WeatherContract.Presenter
 
-        override fun searchWeathersByLocationAndDay(location: String, day: String) {
-            lastSearchedLocation = location
-            lastSearchedDay = day
-        }
+    @BeforeEach
+    fun init() {
+        MockitoAnnotations.initMocks(this)
     }
 
     private var output = ByteArrayOutputStream()
@@ -49,6 +48,10 @@ class WeatherViewTest {
 
     @Test
     fun `given location and day when accepting given data then view should tell presenter to search weathers`() {
+        val locationCaptor = argumentCaptor<String>()
+        val dayCaptor = argumentCaptor<String>()
+        doNothing().`when`(presenter).searchWeathersByLocationAndDay(locationCaptor.capture(), dayCaptor.capture())
+
         val location = "jakarta"
         val day = "monday"
 
@@ -56,7 +59,7 @@ class WeatherViewTest {
         view.setPresenter(presenter)
         view.acceptLocationAndDay(location, day)
 
-        assertEquals(location, presenter.lastSearchedLocation)
-        assertEquals(day, presenter.lastSearchedDay)
+        assertEquals(location, locationCaptor.firstValue)
+        assertEquals(day, dayCaptor.firstValue)
     }
 }
