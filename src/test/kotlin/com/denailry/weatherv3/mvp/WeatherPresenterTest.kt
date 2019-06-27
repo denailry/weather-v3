@@ -1,32 +1,26 @@
 package com.denailry.weatherv3.mvp
 
 import com.denailry.weatherv3.repository.Repository
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.doNothing
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.time.MonthDay
+import org.mockito.Mock
+import org.mockito.Mockito
+import org.mockito.MockitoAnnotations
 
 class WeatherPresenterTest {
-    private val view = object : WeatherContract.View {
-        var showedWeathers : List<WeatherModel> = ArrayList()
-            private set
+    @Mock
+    lateinit var view : WeatherContract.View
 
-        override fun showWeathers(weathers: List<WeatherModel>) {
-            showedWeathers = weathers
-        }
-    }
+    @Mock
+    lateinit var repository: Repository
 
-    private val repository = object : Repository {
-        var savedWeathers: List<WeatherModel> = ArrayList()
-
-        override fun create(model: WeatherModel) {}
-
-        override fun read(location: String): List<WeatherModel> {
-            return savedWeathers.toList()
-        }
-
-        override fun update(model: WeatherModel) {}
-
-        override fun delete(model: WeatherModel) {}
+    @BeforeEach
+    fun init() {
+        MockitoAnnotations.initMocks(this)
     }
 
     @Test
@@ -36,13 +30,16 @@ class WeatherPresenterTest {
             WeatherModel(location, WeatherModel.Day.MONDAY, 25.0f, "shiny"),
             WeatherModel(location, WeatherModel.Day.TUESDAY, 25.0f, "rainy")
         )
-        repository.savedWeathers = models
+        Mockito.`when`(repository.read(any())).thenReturn(models.toList())
+
+        val weathersCaptor = argumentCaptor<List<WeatherModel>>()
+        doNothing().`when`(view).showWeathers(weathersCaptor.capture())
 
         val presenter = WeatherPresenter(view, repository)
         presenter.searchWeathersByLocationAndDay("jakarta", "monday")
 
-        assertEquals(models.size, view.showedWeathers.size)
-        for (showedModel in view.showedWeathers) {
+        assertEquals(models.size, weathersCaptor.firstValue.size)
+        for (showedModel in weathersCaptor.firstValue) {
             for (i in 0 until models.size) {
                 val model = models[i]
                 if (model.location == showedModel.location && model.day == showedModel.day) {
@@ -66,12 +63,15 @@ class WeatherPresenterTest {
             WeatherModel(location, WeatherModel.Day.TUESDAY, 25.0f, "rainy"),
             WeatherModel(location, WeatherModel.Day.FRIDAY, 25.0f, "rainy")
         )
-        repository.savedWeathers = models
+        Mockito.`when`(repository.read(any())).thenReturn(models.toList())
+
+        val weathersCaptor = argumentCaptor<List<WeatherModel>>()
+        doNothing().`when`(view).showWeathers(weathersCaptor.capture())
 
         val presenter = WeatherPresenter(view, repository)
         presenter.searchWeathersByLocationAndDay("jakarta", "monday")
 
-        val showedWeathers = view.showedWeathers
+        val showedWeathers = weathersCaptor.firstValue
         assertEquals(5, showedWeathers.size)
         assertEquals(WeatherModel.Day.MONDAY, showedWeathers[0].day)
         assertEquals(WeatherModel.Day.TUESDAY, showedWeathers[1].day)
