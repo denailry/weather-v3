@@ -1,9 +1,8 @@
 package com.denailry.weatherv3
 
-import com.denailry.weatherv3.mvp.WeatherContract
 import com.denailry.weatherv3.mvp.WeatherPresenter
 import com.denailry.weatherv3.mvp.WeatherView
-import com.denailry.weatherv3.repository.PersistentStorage
+import com.denailry.weatherv3.repository.PersistentRepository
 import com.mocked.database.GoSQL
 
 class Application {
@@ -12,7 +11,7 @@ class Application {
     fun run() {
         view = WeatherView()
         val database = GoSQL("src/main/resources/weathers.txt")
-        val repository = PersistentStorage(database)
+        val repository = PersistentRepository(database)
         val presenter = WeatherPresenter(view!!, repository)
         view!!.setPresenter(presenter)
         startReceivingInput()

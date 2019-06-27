@@ -14,7 +14,7 @@ import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 
-class PersistentStorageTest {
+class PersistentRepositoryTest {
     @Mock
     lateinit var storage: Database
 
@@ -28,7 +28,7 @@ class PersistentStorageTest {
         val captor = argumentCaptor<Weather>()
         doNothing().`when`(storage).save(captor.capture())
 
-        val database = PersistentStorage(storage)
+        val database = PersistentRepository(storage)
         val model = WeatherModel("jakarta", WeatherModel.Day.MONDAY, 25.5f, "shiny")
 
         database.create(model)
@@ -47,7 +47,7 @@ class PersistentStorageTest {
         )
         Mockito.`when`(storage.getByLocation(any())).thenReturn(weathers)
 
-        val database = PersistentStorage(storage)
+        val database = PersistentRepository(storage)
         val results = database.read(location)
 
         assertEquals(weathers.size, results.size)
@@ -68,7 +68,7 @@ class PersistentStorageTest {
         val captor = argumentCaptor<Weather>()
         doNothing().`when`(storage).save(captor.capture())
 
-        val database = PersistentStorage(storage)
+        val database = PersistentRepository(storage)
         val model = WeatherModel("jakarta", WeatherModel.Day.MONDAY, 25.5f, "shiny")
 
         database.update(model)
@@ -83,7 +83,7 @@ class PersistentStorageTest {
         val dayCaptor = argumentCaptor<WeatherDay>()
         doNothing().`when`(storage).delete(locationCaptor.capture(), dayCaptor.capture())
 
-        val database = PersistentStorage(storage)
+        val database = PersistentRepository(storage)
         val model = WeatherModel("jakarta", WeatherModel.Day.MONDAY, 25.5f, "shiny")
 
         database.delete(model)

@@ -4,7 +4,7 @@ import com.denailry.weatherv3.mvp.WeatherModel
 import com.mocked.cache.Cache
 import com.mocked.cache.Weather
 
-class CacheStorage(private val cache: Cache) : Repository {
+class CacheRepository(private val cache: Cache) : Repository {
     override fun create(model: WeatherModel) {
         cache.save(createKey(model), createCachedWeatherFromModel(model))
     }

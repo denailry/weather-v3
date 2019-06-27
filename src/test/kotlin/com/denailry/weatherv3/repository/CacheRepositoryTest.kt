@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 
-class CacheStorageTest {
+class CacheRepositoryTest {
     @Mock
     lateinit var storage: Cache
 
@@ -28,7 +28,7 @@ class CacheStorageTest {
         val weatherCaptor = argumentCaptor<Weather>()
         doNothing().`when`(storage).save(keyCaptor.capture(), weatherCaptor.capture())
 
-        val cache = CacheStorage(storage)
+        val cache = CacheRepository(storage)
         val model = WeatherModel("jakarta", WeatherModel.Day.MONDAY, 25.5f, "shiny")
 
         cache.create(model)
@@ -56,7 +56,7 @@ class CacheStorageTest {
             return@doAnswer null
         }.`when`(storage).get(any())
 
-        val cache = CacheStorage(storage)
+        val cache = CacheRepository(storage)
         val results = cache.read(location)
 
         assertEquals(weathers.size, results.size)
@@ -79,7 +79,7 @@ class CacheStorageTest {
         doNothing().`when`(storage).save(keyCaptor.capture(), weatherCaptor.capture())
 
         val model = WeatherModel("jakarta", WeatherModel.Day.MONDAY, 25.5f, "shiny")
-        val cache = CacheStorage(storage)
+        val cache = CacheRepository(storage)
 
         cache.delete(model)
 
@@ -94,7 +94,7 @@ class CacheStorageTest {
         doNothing().`when`(storage).save(keyCaptor.capture(), weatherCaptor.capture())
 
         val model = WeatherModel("jakarta", WeatherModel.Day.MONDAY, 25.5f, "shiny")
-        val cache = CacheStorage(storage)
+        val cache = CacheRepository(storage)
 
         cache.update(model)
 

@@ -6,7 +6,7 @@ import com.mocked.database.Weather
 import com.mocked.database.WeatherDay
 import java.lang.Exception
 
-class PersistentStorage(private val database: Database) : Repository {
+class PersistentRepository(private val database: Database) : Repository {
     override fun create(model: WeatherModel) = update(model)
 
     override fun read(location: String): List<WeatherModel> {
