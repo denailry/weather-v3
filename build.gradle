@@ -31,6 +31,17 @@ test {
     useJUnitPlatform()
 }
 
+tasks.withType(Test) {
+    testLogging {
+        exceptionFormat "full"
+        showCauses true
+        showExceptions true
+        showStackTraces true
+        showStandardStreams true
+        events = ["passed", "skipped", "failed", "standardError"]
+    }
+}
+
 run { 
     standardInput = System.in
 }
