@@ -23,7 +23,10 @@ class SmartRepository(cacheStorage: Cache, persistentStorage: Database) : Reposi
         return results
     }
 
-    override fun update(model: WeatherModel) {}
+    override fun update(model: WeatherModel) {
+        cache.update(model)
+        database.update(model)
+    }
 
     override fun delete(model: WeatherModel) {}
 }

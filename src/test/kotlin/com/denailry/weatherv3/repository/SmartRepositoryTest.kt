@@ -86,4 +86,25 @@ class SmartRepositoryTest {
         verify(database, times(0)).getByLocation(any())
         assertEquals(weathers.size, results.size)
     }
+
+    @Test
+    fun `given weather when update is called then update should be called in cache and database`() {
+        val keyCaptor = argumentCaptor<String>()
+        val cacheWeatherCaptor = argumentCaptor<CacheWeather>()
+        doNothing().`when`(cache).save(keyCaptor.capture(), cacheWeatherCaptor.capture())
+
+        val databaseWeatherCaptor = argumentCaptor<DatabaseWeather>()
+        doNothing().`when`(database).save(databaseWeatherCaptor.capture())
+
+        val repo = SmartRepository(cache, database)
+        val model = WeatherModel("jakarta", WeatherModel.Day.MONDAY, 25.5f, "shiny")
+
+        repo.update(model)
+
+        assertEquals("${model.location}:${model.day}", keyCaptor.firstValue)
+        assertEquals(model.location, cacheWeatherCaptor.firstValue.location)
+        assertEquals(model.day.toString(), cacheWeatherCaptor.firstValue.day)
+        assertEquals(model.location, databaseWeatherCaptor.firstValue.location)
+        assertEquals(model.day.toString(), databaseWeatherCaptor.firstValue.day.toString())
+    }
 }
