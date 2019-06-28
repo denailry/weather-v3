@@ -1,25 +1,25 @@
 package com.denailry.mocked.database
 
-enum class WeatherDay(value: Int) {
-    MONDAY(0) {
+enum class WeatherDay() {
+    MONDAY() {
         override fun toString(): String = "monday"
     },
-    TUESDAY(1) {
+    TUESDAY() {
         override fun toString(): String = "tuesday"
     },
-    WEDNESDAY(2) {
+    WEDNESDAY() {
         override fun toString(): String = "wednesday"
     },
-    THURSDAY(3) {
+    THURSDAY() {
         override fun toString(): String = "thursday"
     },
-    FRIDAY(4) {
+    FRIDAY() {
         override fun toString(): String = "friday"
     },
-    SATURDAY(5) {
+    SATURDAY() {
         override fun toString(): String = "saturday"
     },
-    SUNDAY(6) {
+    SUNDAY() {
         override fun toString(): String = "sunday"
     }
 }

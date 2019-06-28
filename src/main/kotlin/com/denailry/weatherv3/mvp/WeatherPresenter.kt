@@ -32,7 +32,7 @@ class WeatherPresenter(private val view: WeatherContract.View, private val repo:
     }
 
     private fun findIndexOfDay(weathers: List<WeatherModel>, rawDay: String) : Int? {
-        val day = parseDay(rawDay) ?: null
+        val day = parseDay(rawDay) ?: return null
 
         for ((index, weather) in weathers.withIndex()) {
             if (weather.day == day) {
