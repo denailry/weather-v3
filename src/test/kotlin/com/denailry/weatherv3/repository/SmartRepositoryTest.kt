@@ -44,4 +44,16 @@ class SmartRepositoryTest {
         assertEquals(model.location, databaseWeatherCaptor.firstValue.location)
         assertEquals(model.day.toString(), databaseWeatherCaptor.firstValue.day.toString())
     }
+
+    @Test
+    fun `given location when data in cache is not complete then weather should be fetched from database`() {
+        val location = "jakarta"
+
+        val repo = SmartRepository(cache, database)
+
+        repo.read(location)
+
+        verify(cache, times(7)).get(any())
+        verify(database).getByLocation(any())
+    }
 }
