@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mock
+import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 
 class SmartRepositoryTest {
@@ -129,5 +130,28 @@ class SmartRepositoryTest {
         Assertions.assertNull(cacheWeatherCaptor.firstValue)
         assertEquals(model.location, locationCaptor.firstValue)
         assertEquals(model.day.toString(), dayCaptor.firstValue.toString())
+    }
+
+    @Test
+    fun `given location when data in cache is not complete then data from database should be saved in cache`() {
+        val location = "jakarta"
+        val weathers = arrayListOf(
+            DatabaseWeather(location, WeatherDay.MONDAY, 25.3f, "x"),
+            DatabaseWeather(location, WeatherDay.TUESDAY, 25.3f, "x"),
+            DatabaseWeather(location, WeatherDay.SATURDAY, 25.3f, "x"),
+            DatabaseWeather(location, WeatherDay.SUNDAY, 25.3f, "x"),
+            DatabaseWeather(location, WeatherDay.WEDNESDAY, 25.3f, "x"),
+            DatabaseWeather(location, WeatherDay.THURSDAY, 25.3f, "x"),
+            DatabaseWeather(location, WeatherDay.FRIDAY, 25.3f, "x")
+        )
+        Mockito.`when`(database.getByLocation(any())).thenReturn(weathers)
+
+        val repo = SmartRepository(cache, database)
+
+        repo.read(location)
+
+        verify(cache, times(7)).get(any())
+        verify(database).getByLocation(any())
+        verify(cache, times(7)).save(any(), any())
     }
 }

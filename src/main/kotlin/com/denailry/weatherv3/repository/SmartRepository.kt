@@ -14,10 +14,13 @@ class SmartRepository(cacheStorage: Cache, persistentStorage: Database) : Reposi
     }
 
     override fun read(location: String): List<WeatherModel> {
-        val results = cache.read(location)
+        var results = cache.read(location)
 
         if (results.size < 7) {
-            return database.read(location)
+            results = database.read(location)
+            for (result in results) {
+                cache.create(result)
+            }
         }
 
         return results
