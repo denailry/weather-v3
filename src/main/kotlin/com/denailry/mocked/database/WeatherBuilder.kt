@@ -1,4 +1,4 @@
-package com.mocked.database
+package com.denailry.mocked.database
 
 class WeatherBuilder {
     private var location: String? = null

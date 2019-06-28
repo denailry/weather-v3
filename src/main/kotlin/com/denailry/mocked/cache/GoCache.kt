@@ -1,4 +1,4 @@
-package com.mocked.cache
+package com.denailry.mocked.cache
 
 class GoCache : Cache {
     companion object {
@@ -11,7 +11,8 @@ class GoCache : Cache {
         if (weather == null) {
             weathersByLoction[key] = null
         } else {
-            weathersByLoction[key] = CachedWeather(weather, System.currentTimeMillis())
+            weathersByLoction[key] =
+                CachedWeather(weather, System.currentTimeMillis())
         }
     }
 

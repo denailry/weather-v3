@@ -1,11 +1,11 @@
 package com.denailry.weatherv3.repository
 
 import com.denailry.weatherv3.mvp.WeatherModel
-import com.mocked.cache.Cache
-import com.mocked.cache.Weather as CacheWeather
-import com.mocked.database.Weather as DatabaseWeather
-import com.mocked.database.Database
-import com.mocked.database.WeatherDay
+import com.denailry.mocked.cache.Cache
+import com.denailry.mocked.cache.Weather as CacheWeather
+import com.denailry.mocked.database.Weather as DatabaseWeather
+import com.denailry.mocked.database.Database
+import com.denailry.mocked.database.WeatherDay
 import com.nhaarman.mockitokotlin2.*
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals

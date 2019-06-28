@@ -1,4 +1,4 @@
-package com.mocked.api
+package com.denailry.mocked.api
 
 class GoService : API {
     override fun requestPost(body: List<String>) : Boolean = true

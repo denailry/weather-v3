@@ -1,8 +1,8 @@
 package com.denailry.weatherv3.repository
 
 import com.denailry.weatherv3.mvp.WeatherModel
-import com.mocked.cache.Cache
-import com.mocked.cache.Weather
+import com.denailry.mocked.cache.Cache
+import com.denailry.mocked.cache.Weather
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doAnswer

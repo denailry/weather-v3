@@ -1,4 +1,4 @@
-package com.mocked.database
+package com.denailry.mocked.database
 
 import java.io.File
 import java.io.PrintStream

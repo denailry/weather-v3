@@ -3,7 +3,7 @@ package com.denailry.weatherv3
 import com.denailry.weatherv3.mvp.WeatherPresenter
 import com.denailry.weatherv3.mvp.WeatherView
 import com.denailry.weatherv3.repository.PersistentRepository
-import com.mocked.database.GoSQL
+import com.denailry.mocked.database.GoSQL
 
 class Application {
     private var view: WeatherView? = null

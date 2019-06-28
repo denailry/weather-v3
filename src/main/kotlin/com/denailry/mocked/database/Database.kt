@@ -1,4 +1,4 @@
-package com.mocked.database
+package com.denailry.mocked.database
 
 interface Database {
     fun clean()

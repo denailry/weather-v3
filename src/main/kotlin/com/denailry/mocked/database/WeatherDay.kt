@@ -1,4 +1,4 @@
-package com.mocked.database
+package com.denailry.mocked.database
 
 enum class WeatherDay(value: Int) {
     MONDAY(0) {

@@ -1,9 +1,9 @@
 package com.denailry.weatherv3.repository
 
 import com.denailry.weatherv3.mvp.WeatherModel
-import com.mocked.database.Database
-import com.mocked.database.Weather
-import com.mocked.database.WeatherDay
+import com.denailry.mocked.database.Database
+import com.denailry.mocked.database.Weather
+import com.denailry.mocked.database.WeatherDay
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doNothing
@@ -41,9 +41,24 @@ class PersistentRepositoryTest {
     fun `given location when read is called then return all saved weather models corresponding to location`() {
         val location = "jakarta"
         val weathers = arrayListOf(
-            Weather(location, WeatherDay.SUNDAY, 5.0f, "shiny"),
-            Weather(location, WeatherDay.MONDAY, 5.0f, "shiny"),
-            Weather(location, WeatherDay.TUESDAY, 5.0f, "shiny")
+            Weather(
+                location,
+                WeatherDay.SUNDAY,
+                5.0f,
+                "shiny"
+            ),
+            Weather(
+                location,
+                WeatherDay.MONDAY,
+                5.0f,
+                "shiny"
+            ),
+            Weather(
+                location,
+                WeatherDay.TUESDAY,
+                5.0f,
+                "shiny"
+            )
         )
         Mockito.`when`(storage.getByLocation(any())).thenReturn(weathers)
 

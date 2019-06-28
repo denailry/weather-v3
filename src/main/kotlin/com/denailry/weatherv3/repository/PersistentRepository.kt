@@ -1,9 +1,9 @@
 package com.denailry.weatherv3.repository
 
 import com.denailry.weatherv3.mvp.WeatherModel
-import com.mocked.database.Database
-import com.mocked.database.Weather
-import com.mocked.database.WeatherDay
+import com.denailry.mocked.database.Database
+import com.denailry.mocked.database.Weather
+import com.denailry.mocked.database.WeatherDay
 import java.lang.Exception
 
 class PersistentRepository(private val database: Database) : Repository {

@@ -1,4 +1,4 @@
-package com.mocked.api
+package com.denailry.mocked.api
 
 interface API {
     fun requestPost(body: List<String>) : Boolean
