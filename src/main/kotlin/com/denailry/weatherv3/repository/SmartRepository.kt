@@ -28,5 +28,8 @@ class SmartRepository(cacheStorage: Cache, persistentStorage: Database) : Reposi
         database.update(model)
     }
 
-    override fun delete(model: WeatherModel) {}
+    override fun delete(model: WeatherModel) {
+        cache.delete(model)
+        database.delete(model)
+    }
 }

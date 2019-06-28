@@ -5,7 +5,9 @@ import com.mocked.cache.Cache
 import com.mocked.cache.Weather as CacheWeather
 import com.mocked.database.Weather as DatabaseWeather
 import com.mocked.database.Database
+import com.mocked.database.WeatherDay
 import com.nhaarman.mockitokotlin2.*
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -106,5 +108,26 @@ class SmartRepositoryTest {
         assertEquals(model.day.toString(), cacheWeatherCaptor.firstValue.day)
         assertEquals(model.location, databaseWeatherCaptor.firstValue.location)
         assertEquals(model.day.toString(), databaseWeatherCaptor.firstValue.day.toString())
+    }
+
+    @Test
+    fun `given weather when delete is called then delete should be called in cache and database`() {
+        val keyCaptor = argumentCaptor<String>()
+        val cacheWeatherCaptor = argumentCaptor<CacheWeather>()
+        doNothing().`when`(cache).save(keyCaptor.capture(), cacheWeatherCaptor.capture())
+
+        val locationCaptor = argumentCaptor<String>()
+        val dayCaptor = argumentCaptor<WeatherDay>()
+        doNothing().`when`(database).delete(locationCaptor.capture(), dayCaptor.capture())
+
+        val repo = SmartRepository(cache, database)
+        val model = WeatherModel("jakarta", WeatherModel.Day.MONDAY, 25.5f, "shiny")
+
+        repo.delete(model)
+
+        assertEquals("${model.location}:${model.day}", keyCaptor.firstValue)
+        Assertions.assertNull(cacheWeatherCaptor.firstValue)
+        assertEquals(model.location, locationCaptor.firstValue)
+        assertEquals(model.day.toString(), dayCaptor.firstValue.toString())
     }
 }
