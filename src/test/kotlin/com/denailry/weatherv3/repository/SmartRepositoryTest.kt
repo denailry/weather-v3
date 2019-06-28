@@ -56,4 +56,34 @@ class SmartRepositoryTest {
         verify(cache, times(7)).get(any())
         verify(database).getByLocation(any())
     }
+
+    @Test
+    fun `given location when data in cache is complete then database should not be called`() {
+        val location = "jakarta"
+        val weathers = arrayListOf(
+            CacheWeather(location, "x", "0.0", "monday"),
+            CacheWeather(location, "x", "0.0", "friday"),
+            CacheWeather(location, "x", "0.0", "tuesday"),
+            CacheWeather(location, "x", "0.0", "wednesday"),
+            CacheWeather(location, "x", "0.0", "saturday"),
+            CacheWeather(location, "x", "0.0", "sunday"),
+            CacheWeather(location, "x", "0.0", "thursday")
+        )
+        doAnswer {
+            for (i in 0 until weathers.size) {
+                if (it.arguments[0].toString() == "$location:${weathers[i].day}") {
+                    return@doAnswer weathers[i]
+                }
+            }
+            return@doAnswer null
+        }.`when`(cache).get(any())
+
+        val repo = SmartRepository(cache, database)
+
+        val results = repo.read(location)
+
+        verify(cache, times(7)).get(any())
+        verify(database, times(0)).getByLocation(any())
+        assertEquals(weathers.size, results.size)
+    }
 }
